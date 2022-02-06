@@ -13,7 +13,7 @@ import 'package:word_notifier/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const WordNotifierApp());
+    await tester.pumpWidget(WordNotifierApp());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
