@@ -24,7 +24,7 @@ class UserModel extends UserEntity {
       email: json['email'],
       password: json['password'],
       createdAt: DateTime.fromMillisecondsSinceEpoch(json['created_at'] as int),
-      isDisabled: json['is_disabled'],
+      isDisabled: json['is_disabled'] == 1,
     );
   }
 
@@ -35,7 +35,7 @@ class UserModel extends UserEntity {
       'email': email,
       'password': password,
       'created_at': createdAt.millisecondsSinceEpoch,
-      'is_disabled': isDisabled,
+      'is_disabled': isDisabled ? 1 : 0,
     };
   }
 }

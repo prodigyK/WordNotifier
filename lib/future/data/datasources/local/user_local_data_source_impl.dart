@@ -1,9 +1,10 @@
 import 'package:sqflite/sqflite.dart';
+import 'package:word_notifier/core/db/db_data.dart';
 import 'package:word_notifier/future/data/datasources/local/user_local_data_source.dart';
 import 'package:word_notifier/future/data/models/user_model.dart';
 
 class UserLocalDataSourceImpl implements UserLocalDataSource {
-  static const String table = 'users';
+  static const String table = AppDatabaseSettings.userTable;
   final Database database;
 
   UserLocalDataSourceImpl({required this.database});
