@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:word_notifier/future/data/datasources/user_local_data_source.dart';
+import 'package:word_notifier/future/data/datasources/local/user_local_data_source.dart';
 import 'package:word_notifier/future/data/models/user_model.dart';
 
 class UserLocalDataSourceImpl implements UserLocalDataSource {

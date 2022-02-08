@@ -4,8 +4,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:dotenv/dotenv.dart';
 import 'package:word_notifier/future/data/datasources/local_settings_data_source.dart';
 import 'package:word_notifier/future/data/datasources/local_settings_data_source_impl.dart';
-import 'package:word_notifier/future/data/datasources/user_local_data_source.dart';
-import 'package:word_notifier/future/data/datasources/user_local_data_source_impl.dart';
+import 'package:word_notifier/future/data/datasources/local/user_local_data_source.dart';
+import 'package:word_notifier/future/data/datasources/local/user_local_data_source_impl.dart';
 import 'package:word_notifier/future/domain/repositories/local_settings_repository_impl.dart';
 import 'package:word_notifier/future/domain/usecases/locale/get_locale.dart';
 

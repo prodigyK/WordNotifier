@@ -45,3 +45,5 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 .env*
+/ios/Flutter/Flutter 2.podspec
+/ios/Flutter/flutter_export_environment 5.sh
