@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:word_notifier/core/db/db_data.dart';
+import 'package:word_notifier/core/error/exception.dart';
 import 'package:word_notifier/future/data/datasources/local/user_local_data_source.dart';
 import 'package:word_notifier/future/data/models/user_model.dart';
 
@@ -11,17 +12,20 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
 
   @override
   Future<int> insert(UserModel user) async {
-    return await database.insert(table, user.toJson());
+    final result = await database.insert(table, user.toJson());
+    return result > 0 ? result : throw CacheException();
   }
 
   @override
   Future<int> update(UserModel user) async {
-    return await database.update(table, user.toJson());
+    final result = await database.update(table, user.toJson());
+    return result > 0 ? result : throw CacheException();
   }
 
   @override
-  Future<int> delete(int userId) {
-    return database.delete(table, where: 'id = ?', whereArgs: [userId]);
+  Future<int> delete(int userId) async {
+    final result = await database.delete(table, where: 'id = ?', whereArgs: [userId]);
+    return result > 0 ? result : throw CacheException();
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:word_notifier/core/db/db_data.dart';
+import 'package:word_notifier/core/error/exception.dart';
 import 'package:word_notifier/future/data/models/card_model.dart';
 
 import 'card_local_data_source.dart';
@@ -11,28 +12,40 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
   CardLocalDataSourceImpl({required this.database});
 
   @override
-  Future<int> insert(CardModel user) async {
-    return await database.insert(table, user.toJson());
+  Future<int> insert(CardModel card, int userId) async {
+    if (card.userId != userId) {
+      throw SecurityException();
+    }
+    final result = await database.insert(table, card.toJson());
+    return result > 0 ? result : throw CacheException();
   }
 
   @override
-  Future<int> update(CardModel user) async {
-    return await database.update(table, user.toJson());
+  Future<int> update(CardModel card, int userId) async {
+    if (card.userId != userId) {
+      throw SecurityException();
+    }
+    final result = await database.update(table, card.toJson());
+    return result > 0 ? result : throw CacheException();
   }
 
   @override
-  Future<int> delete(int userId) {
-    return database.delete(table, where: 'id = ?', whereArgs: [userId]);
+  Future<int> delete(CardModel card, int userId) async {
+    if (card.userId != userId) {
+      throw SecurityException();
+    }
+    final result = await database.delete(table, where: 'id = ?', whereArgs: [card.id]);
+    return result > 0 ? result : throw CacheException();
   }
 
   @override
-  Future<CardModel> fetch(int id) async {
+  Future<List<CardModel>> fetchAll(int userId) async {
     List<Map<String, dynamic>> result = await database.query(
       table,
       columns: ['id', 'word', 'translation', 'is_learnt', 'created_at', 'user_id'],
-      where: 'id = ?',
-      whereArgs: [id],
+      where: 'user_id = ?',
+      whereArgs: [userId],
     );
-    return result.map((item) => CardModel.fromJson(item)).first;
+    return result.map((item) => CardModel.fromJson(item)).toList();
   }
 }

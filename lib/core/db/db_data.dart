@@ -9,6 +9,7 @@ class AppDatabaseSettings {
 
   static const String userTable = 'users';
   static const String cardTable = 'cards';
+  static const String dictionaryTable = 'dictionary';
 
   static Future<Database> openDB() async {
     final String dbName = env['userdata_db'] ?? 'temp.db';
@@ -47,7 +48,7 @@ class AppDatabaseSettings {
         'email TEXT, '
         'password TEXT,'
         'created_at TIMESTAMP,'
-        'is_disabled REAL'
+        'is_disabled INTEGER'
       ')';
 
   static const String createCardTable = ''
@@ -55,9 +56,9 @@ class AppDatabaseSettings {
         'id INTEGER PRIMARY KEY, '
         'word TEXT, '
         'translation TEXT, '
-        'is_learnt REAL,'
+        'is_learnt INTEGER,'
         'created_at TIMESTAMP,'
-        'user_id REAL'
+        'user_id INTEGER'
       ')';
 
 }

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:word_notifier/future/data/datasources/local/card_local_data_source.dart';
 import 'package:word_notifier/future/data/datasources/local/card_local_data_source_impl.dart';
+import 'package:word_notifier/future/data/datasources/local/dictionary/dictionary_local_data_source.dart';
 import 'package:word_notifier/future/data/datasources/local_settings_data_source.dart';
 import 'package:word_notifier/future/data/datasources/local_settings_data_source_impl.dart';
 import 'package:word_notifier/future/data/datasources/local/user_local_data_source.dart';
@@ -11,6 +12,7 @@ import 'package:word_notifier/future/domain/repositories/local_settings_reposito
 import 'package:word_notifier/future/domain/usecases/locale/get_locale.dart';
 
 import 'core/db/db_data.dart';
+import 'future/data/datasources/local/dictionary/dictionary_local_data_source_impl.dart';
 import 'future/domain/repositories/local_settings_repository.dart';
 import 'future/domain/usecases/locale/update_locale.dart';
 
@@ -29,5 +31,8 @@ Future<void> init() async {
   final Database database = await AppDatabaseSettings.openDB();
   sl.registerLazySingleton<UserLocalDataSource>(() => UserLocalDataSourceImpl(database: database));
   sl.registerLazySingleton<CardLocalDataSource>(() => CardLocalDataSourceImpl(database: database));
+
+  final Database databaseDict = await AppDatabaseSettings.openDictionaryDB();
+  sl.registerLazySingleton<DictionaryLocalDataSource>(() => DictionaryLocalDataSourceImpl(database: databaseDict));
 }
 
