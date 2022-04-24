@@ -12,19 +12,31 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
 
   @override
   Future<int> insert(UserModel user) async {
-    final result = await database.insert(table, user.toJson());
+    final result = await database.insert(
+      table,
+      user.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
     return result > 0 ? result : throw CacheException();
   }
 
   @override
   Future<int> update(UserModel user) async {
-    final result = await database.update(table, user.toJson());
+    final result = await database.update(
+      table,
+      user.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
     return result > 0 ? result : throw CacheException();
   }
 
   @override
   Future<int> delete(int userId) async {
-    final result = await database.delete(table, where: 'id = ?', whereArgs: [userId]);
+    final result = await database.delete(
+      table,
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
     return result > 0 ? result : throw CacheException();
   }
 

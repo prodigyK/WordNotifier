@@ -16,7 +16,11 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
     if (card.userId != userId) {
       throw SecurityException();
     }
-    final result = await database.insert(table, card.toJson());
+    final result = await database.insert(
+      table,
+      card.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
     return result > 0 ? result : throw CacheException();
   }
 
@@ -25,7 +29,11 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
     if (card.userId != userId) {
       throw SecurityException();
     }
-    final result = await database.update(table, card.toJson());
+    final result = await database.update(
+      table,
+      card.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
     return result > 0 ? result : throw CacheException();
   }
 
@@ -34,7 +42,11 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
     if (card.userId != userId) {
       throw SecurityException();
     }
-    final result = await database.delete(table, where: 'id = ?', whereArgs: [card.id]);
+    final result = await database.delete(
+      table,
+      where: 'id = ?',
+      whereArgs: [card.id],
+    );
     return result > 0 ? result : throw CacheException();
   }
 

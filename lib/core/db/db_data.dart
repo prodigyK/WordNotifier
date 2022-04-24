@@ -1,4 +1,5 @@
 import 'package:dotenv/dotenv.dart';
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AppDatabaseSettings {
@@ -13,12 +14,20 @@ class AppDatabaseSettings {
 
   static Future<Database> openDB() async {
     final String dbName = env['userdata_db'] ?? 'temp.db';
-    return await openDatabase(dbName, version: versionDb, onCreate: _createTables);
+    return await openDatabase(
+      join(await getDatabasesPath(), dbName),
+      version: versionDb,
+      onCreate: _createTables,
+    );
   }
 
   static Future<Database> openDictionaryDB() async {
     final String dbName = env['dictionary_db'] ?? 'dict_temp.db';
-    return await openDatabase(dbName, version: versionDictDb, onCreate: _createDictionaryTable);
+    return await openDatabase(
+      join(await getDatabasesPath(), dbName),
+      version: versionDictDb,
+      onCreate: _createDictionaryTable,
+    );
   }
 
   static _createTables(Database database, int versionDb) async {
@@ -27,39 +36,37 @@ class AppDatabaseSettings {
       txn.execute(createCardTable);
     });
   }
-  
+
   static _createDictionaryTable(Database database, int versionDb) async {
     await database.execute(createDictionaryTable);
   }
 
   static const String createDictionaryTable = ''
       'CREATE TABLE $userTable('
-        'id INTEGER PRIMARY KEY, '
-        'word TEXT, '
-        'translation TEXT, '
-        'transcription TEXT,'
-        'direction TEXT,'
+      'id INTEGER PRIMARY KEY, '
+      'word TEXT, '
+      'translation TEXT, '
+      'transcription TEXT,'
+      'direction TEXT'
       ')';
 
   static const String createUserTable = ''
       'CREATE TABLE $userTable('
-        'id INTEGER PRIMARY KEY, '
-        'name TEXT, '
-        'email TEXT, '
-        'password TEXT,'
-        'created_at TIMESTAMP,'
-        'is_disabled INTEGER'
+      'id INTEGER PRIMARY KEY, '
+      'name TEXT, '
+      'email TEXT, '
+      'password TEXT,'
+      'created_at TIMESTAMP,'
+      'is_disabled INTEGER'
       ')';
 
   static const String createCardTable = ''
       'CREATE TABLE $cardTable('
-        'id INTEGER PRIMARY KEY, '
-        'word TEXT, '
-        'translation TEXT, '
-        'is_learnt INTEGER,'
-        'created_at TIMESTAMP,'
-        'user_id INTEGER'
+      'id INTEGER PRIMARY KEY, '
+      'word TEXT, '
+      'translation TEXT, '
+      'is_learnt INTEGER,'
+      'created_at TIMESTAMP,'
+      'user_id INTEGER'
       ')';
-
 }
-
