@@ -17,6 +17,17 @@ class UserModel extends UserEntity {
           isDisabled: isDisabled,
         );
 
+  factory UserModel.fromEntity(UserEntity userEntity) {
+    return UserModel(
+      id: userEntity.id,
+      name: userEntity.name,
+      email: userEntity.email,
+      password: userEntity.password,
+      createdAt: userEntity.createdAt,
+      isDisabled: userEntity.isDisabled,
+    );
+  }
+
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'],

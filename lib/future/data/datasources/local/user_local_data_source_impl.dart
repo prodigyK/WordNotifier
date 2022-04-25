@@ -50,4 +50,10 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
     );
     return result.map((item) => UserModel.fromJson(item)).first;
   }
+
+  @override
+  Future<UserModel?> fetchCurrent() async {
+    List<Map<String, dynamic>> result = await database.query(table);
+    return result.isNotEmpty ? result.map((item) => UserModel.fromJson(item)).first : null;
+  }
 }

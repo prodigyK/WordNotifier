@@ -5,12 +5,15 @@ import 'package:word_notifier/common/navigation/navigation_service.dart';
 import 'package:word_notifier/common/routes/app_routes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:word_notifier/future/domain/usecases/locale/update_locale.dart';
+import 'package:word_notifier/future/domain/usecases/users/fetch_user_case.dart';
+import 'package:word_notifier/future/domain/usecases/users/insert_user_case.dart';
 import 'package:word_notifier/service_locator.dart' as di;
 import 'package:dotenv/dotenv.dart' as dotenv;
 
 import 'common/themes/app_theme.dart';
 import 'future/domain/usecases/locale/get_locale.dart';
 import 'future/presentation/bloc/locale/app_locale_cubit.dart';
+import 'future/presentation/bloc/users/user_cubit.dart';
 import 'future/presentation/screens/home_screen.dart';
 
 void main() async {
@@ -25,6 +28,13 @@ void main() async {
             getLocaleCase: di.sl<GetLocaleCase>(),
             updateLocaleCase: di.sl<UpdateLocaleCase>(),
           )..getLocale(),
+        ),
+        BlocProvider<UserCubit>(
+          lazy: false,
+          create: (context) => UserCubit(
+            insertUserCase: di.sl<InsertUserCase>(),
+            fetchUserCase: di.sl<FetchUserCase>(),
+          )..init(),
         ),
       ],
       child: WordNotifierApp(),

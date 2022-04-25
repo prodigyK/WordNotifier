@@ -1,13 +1,11 @@
 import 'package:word_notifier/future/data/models/user_model.dart';
 
-abstract class UserLocalDataSource {
+abstract class UserRemoteDataSource {
   Future<int> insert(UserModel user);
 
   Future<UserModel> fetch(int id);
 
-  Future<UserModel?> fetchCurrent();
-
   Future<int> update(UserModel user);
 
-  Future<int> delete(int userId);
+  Future<String> generateUniqueIdentifier();
 }

@@ -16,6 +16,31 @@ class UserEntity extends BaseEntity {
     this.isDisabled = false,
   }) : super(id);
 
+  factory UserEntity.empty() {
+    return UserEntity(
+      id: 0,
+      name: '',
+      email: '',
+      password: '',
+      createdAt: DateTime.now(),
+    );
+  }
+
+  factory UserEntity.defaultUser() {
+    return UserEntity(
+      id: 0,
+      name: 'default',
+      email: 'test@email.com',
+      password: '123',
+      createdAt: DateTime.now(),
+    );
+  }
+
   @override
   List<Object> get props => [id, name, email, password, createdAt, isDisabled];
+
+  @override
+  String toString() {
+    return 'UserEntity{name: $name, email: $email, password: $password, createdAt: $createdAt, isDisabled: $isDisabled}';
+  }
 }
