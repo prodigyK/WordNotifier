@@ -10,18 +10,28 @@ const String dictLoaded = 'DICT_LOADED';
 class AppUtilsDB {
   AppUtilsDB._();
 
+  /// Load dictionary from file and insert it to database
   static void loadDictionaryFromFile({required Database database, required SharedPreferences prefs}) async {
     bool isLoaded = false;
+
+    // check if db version is changed, if yes reload data
     if (prefs.containsKey(dictLoaded)) {
-      isLoaded = prefs.getBool(dictLoaded) ?? false;
+      isLoaded = prefs.getInt(dictLoaded) == AppDatabaseSettings.versionDictDb;
     }
     if (isLoaded) {
       return;
     }
     int start = DateTime.now().millisecondsSinceEpoch;
+
+    // load and parse data from file
     List<Map<String, String>> dict = await _parseDictionaryFile();
 
-    database.transaction((txn) async {
+    // delete all rows
+    int rows = await database.delete(AppDatabaseSettings.dictionaryTable);
+    debugPrint('Rows deleted = $rows');
+
+    // insert rows
+    await database.transaction((txn) async {
       for (var element in dict) {
         await txn.insert(
           AppDatabaseSettings.dictionaryTable,
@@ -30,16 +40,17 @@ class AppUtilsDB {
         );
       }
     });
-    List<dynamic> result = await database.rawQuery(
-      'SELECT * FROM ${AppDatabaseSettings.dictionaryTable}',
-    );
 
-    if (result.length > 1000) {
-      prefs.setBool(dictLoaded, true);
+    // check success
+    List<dynamic> result = await database.rawQuery(
+      'SELECT count(*) FROM ${AppDatabaseSettings.dictionaryTable}',
+    );
+    if (result[0].row.first > 9000) {
+      prefs.setInt(dictLoaded, AppDatabaseSettings.versionDictDb);
     }
 
     int end = DateTime.now().millisecondsSinceEpoch;
-    debugPrint('time = ${(end - start) / 1000}, ${result.length}');
+    debugPrint('time = ${(end - start) / 1000}, ${result[0].row.first}');
   }
 
   static Future<List<Map<String, String>>> _parseDictionaryFile() async {

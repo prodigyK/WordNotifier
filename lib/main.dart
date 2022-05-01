@@ -41,13 +41,11 @@ void main() async {
           )..init(),
         ),
         BlocProvider<DictionaryCubit>(
-          lazy: false,
           create: (context) => DictionaryCubit(
             insertDictionaryCase: di.sl<InsertDictionaryCase>(),
           ),
         ),
         BlocProvider<SearchDictionaryCubit>(
-          lazy: false,
           create: (context) => SearchDictionaryCubit(
             searchDictionaryCase: di.sl<SearchDictionaryCase>(),
           ),
