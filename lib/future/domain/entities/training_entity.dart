@@ -9,5 +9,5 @@ class TrainingEntity extends BaseEntity {
   }) : super(id);
 
   @override
-  List<Object> get props => [id, name];
+  List<Object?> get props => [id, name];
 }

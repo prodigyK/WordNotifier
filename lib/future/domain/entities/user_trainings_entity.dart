@@ -13,5 +13,5 @@ class UserTrainingsEntity extends BaseEntity {
   }) : super(id);
 
   @override
-  List<Object> get props => [id, userId, trainingId, isEnabled];
+  List<Object?> get props => [id, userId, trainingId, isEnabled];
 }

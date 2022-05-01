@@ -35,5 +35,5 @@ class CardEntity extends BaseEntity {
   }
 
   @override
-  List<Object> get props => [id, word, translation, isLearnt, createdAt, userId];
+  List<Object?> get props => [id, word, translation, isLearnt, createdAt, userId];
 }

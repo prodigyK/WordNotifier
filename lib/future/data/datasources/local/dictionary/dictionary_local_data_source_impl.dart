@@ -8,11 +8,16 @@ class DictionaryLocalDataSourceImpl implements DictionaryLocalDataSource {
   static const String table = AppDatabaseSettings.dictionaryTable;
 
   final Database database;
+
   DictionaryLocalDataSourceImpl({required this.database});
 
   @override
   Future<int> insert(DictionaryModel dict) async {
-    final result = await database.insert(table, dict.toJson());
+    final result = await database.insert(
+      table,
+      dict.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
     return result > 0 ? result : throw CacheException();
   }
 
@@ -21,7 +26,7 @@ class DictionaryLocalDataSourceImpl implements DictionaryLocalDataSource {
     List<Map<String, dynamic>> result = await database.rawQuery(
       'SELECT id, word, translation, transcription, direction '
       'FROM $table '
-      'WHERE word LIKE "$query"%',
+      'WHERE word LIKE \'%$query%\'',
     );
     return result.map((item) => DictionaryModel.fromJson(item)).toList();
   }

@@ -15,5 +15,5 @@ class DictionaryEntity extends BaseEntity {
   }) : super(id);
 
   @override
-  List<Object> get props => [id, word, translation, transcription, direction];
+  List<Object?> get props => [id, word, translation, transcription, direction];
 }

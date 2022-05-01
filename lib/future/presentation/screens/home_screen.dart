@@ -1,6 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:word_notifier/future/data/models/dictionary_model.dart';
+import 'package:word_notifier/future/domain/entities/dictionary_entity.dart';
+import 'package:word_notifier/future/presentation/bloc/dictionary/dictionary_cubit.dart';
+import 'package:word_notifier/future/presentation/bloc/dictionary/search_dictionary_cubit.dart';
 import 'package:word_notifier/future/presentation/bloc/locale/app_locale_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,17 +32,35 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () async {
               BlocProvider.of<AppLocaleCubit>(context).updateLocale(const Locale('ru'));
             },
-            child: Text('RU'),
+            child: const Text('RU'),
           ),
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () async {
               BlocProvider.of<AppLocaleCubit>(context).updateLocale(const Locale('en'));
             },
-            child: Text('EN'),
+            child: const Text('EN'),
+          ),
+          const SizedBox(height: 40),
+          ElevatedButton(
+            onPressed: () async {
+
+            },
+            child: const Text('Load Dictionary'),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () async {
+              final SearchDictionaryCubit dictCubit = BlocProvider.of<SearchDictionaryCubit>(context);
+              print(await dictCubit.search('hell'));
+
+            },
+            child: const Text('Query'),
           ),
         ],
       ),
     );
   }
+
+
 }

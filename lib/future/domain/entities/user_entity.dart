@@ -37,7 +37,7 @@ class UserEntity extends BaseEntity {
   }
 
   @override
-  List<Object> get props => [id, name, email, password, createdAt, isDisabled];
+  List<Object?> get props => [id, name, email, password, createdAt, isDisabled];
 
   @override
   String toString() {

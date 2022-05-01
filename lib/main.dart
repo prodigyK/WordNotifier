@@ -11,7 +11,11 @@ import 'package:word_notifier/service_locator.dart' as di;
 import 'package:dotenv/dotenv.dart' as dotenv;
 
 import 'common/themes/app_theme.dart';
+import 'future/domain/usecases/dictionary/insert_dictionary_case.dart';
+import 'future/domain/usecases/dictionary/search_dictionary_case.dart';
 import 'future/domain/usecases/locale/get_locale.dart';
+import 'future/presentation/bloc/dictionary/dictionary_cubit.dart';
+import 'future/presentation/bloc/dictionary/search_dictionary_cubit.dart';
 import 'future/presentation/bloc/locale/app_locale_cubit.dart';
 import 'future/presentation/bloc/users/user_cubit.dart';
 import 'future/presentation/screens/home_screen.dart';
@@ -36,6 +40,18 @@ void main() async {
             fetchUserCase: di.sl<FetchUserCase>(),
           )..init(),
         ),
+        BlocProvider<DictionaryCubit>(
+          lazy: false,
+          create: (context) => DictionaryCubit(
+            insertDictionaryCase: di.sl<InsertDictionaryCase>(),
+          ),
+        ),
+        BlocProvider<SearchDictionaryCubit>(
+          lazy: false,
+          create: (context) => SearchDictionaryCubit(
+            searchDictionaryCase: di.sl<SearchDictionaryCase>(),
+          ),
+        ),
       ],
       child: WordNotifierApp(),
     ),
@@ -43,7 +59,7 @@ void main() async {
 }
 
 class WordNotifierApp extends StatelessWidget {
-  WordNotifierApp({Key? key}) : super(key: key);
+  const WordNotifierApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

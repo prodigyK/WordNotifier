@@ -8,13 +8,18 @@ import 'package:word_notifier/future/data/datasources/local_settings_data_source
 import 'package:word_notifier/future/data/datasources/local_settings_data_source_impl.dart';
 import 'package:word_notifier/future/data/datasources/local/user_local_data_source.dart';
 import 'package:word_notifier/future/data/datasources/local/user_local_data_source_impl.dart';
+import 'package:word_notifier/future/domain/repositories/dictionary/dictionary_local_repository.dart';
+import 'package:word_notifier/future/domain/repositories/dictionary/dictionary_local_repository_impl.dart';
 import 'package:word_notifier/future/domain/repositories/local_settings_repository_impl.dart';
 import 'package:word_notifier/future/domain/repositories/user_local_repository_impl.dart';
+import 'package:word_notifier/future/domain/usecases/dictionary/insert_dictionary_case.dart';
+import 'package:word_notifier/future/domain/usecases/dictionary/search_dictionary_case.dart';
 import 'package:word_notifier/future/domain/usecases/locale/get_locale.dart';
 import 'package:word_notifier/future/domain/usecases/users/fetch_user_case.dart';
 import 'package:word_notifier/future/domain/usecases/users/insert_user_case.dart';
 
 import 'core/db/db_data.dart';
+import 'core/db/db_utils.dart';
 import 'future/data/datasources/local/dictionary/dictionary_local_data_source_impl.dart';
 import 'future/domain/repositories/local_settings_repository.dart';
 import 'future/domain/repositories/user_local_repository.dart';
@@ -44,6 +49,9 @@ Future<void> init() async {
 
   // Create a dictionary database
   final Database databaseDict = await AppDatabaseSettings.openDictionaryDB();
+  AppUtilsDB.loadDictionaryFromFile(database: databaseDict, prefs: sharedPreferences);
   sl.registerLazySingleton<DictionaryLocalDataSource>(() => DictionaryLocalDataSourceImpl(database: databaseDict));
+  sl.registerLazySingleton<DictionaryLocalRepository>(() => DictionaryLocalRepositoryImpl(dataSource: sl()));
+  sl.registerLazySingleton<InsertDictionaryCase>(() => InsertDictionaryCase(repository: sl()));
+  sl.registerLazySingleton<SearchDictionaryCase>(() => SearchDictionaryCase(repository: sl()));
 }
-

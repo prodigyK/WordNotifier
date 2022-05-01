@@ -13,7 +13,7 @@ class AppDatabaseSettings {
   static const String dictionaryTable = 'dictionary';
 
   static Future<Database> openDB() async {
-    final String dbName = env['userdata_db'] ?? 'temp.db';
+    const String dbName = 'wordify.db';
     return await openDatabase(
       join(await getDatabasesPath(), dbName),
       version: versionDb,
@@ -22,7 +22,7 @@ class AppDatabaseSettings {
   }
 
   static Future<Database> openDictionaryDB() async {
-    final String dbName = env['dictionary_db'] ?? 'dict_temp.db';
+    const String dbName = 'dictionary.db';
     return await openDatabase(
       join(await getDatabasesPath(), dbName),
       version: versionDictDb,
@@ -32,8 +32,8 @@ class AppDatabaseSettings {
 
   static _createTables(Database database, int versionDb) async {
     await database.transaction((txn) async {
-      txn.execute(createUserTable);
-      txn.execute(createCardTable);
+      await txn.execute(createUserTable);
+      await txn.execute(createCardTable);
     });
   }
 
@@ -42,7 +42,7 @@ class AppDatabaseSettings {
   }
 
   static const String createDictionaryTable = ''
-      'CREATE TABLE $userTable('
+      'CREATE TABLE $dictionaryTable('
       'id INTEGER PRIMARY KEY, '
       'word TEXT, '
       'translation TEXT, '

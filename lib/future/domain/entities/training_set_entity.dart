@@ -15,5 +15,5 @@ class TrainingSetEntity extends BaseEntity {
   }) : super(id);
 
   @override
-  List<Object> get props => [id, userId, trainingId, cardId, isLearnt];
+  List<Object?> get props => [id, userId, trainingId, cardId, isLearnt];
 }
