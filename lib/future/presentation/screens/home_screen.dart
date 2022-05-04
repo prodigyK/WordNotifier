@@ -1,12 +1,7 @@
-import 'dart:io';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:word_notifier/future/data/models/dictionary_model.dart';
-import 'package:word_notifier/future/domain/entities/dictionary_entity.dart';
-import 'package:word_notifier/future/presentation/bloc/dictionary/dictionary_cubit.dart';
 import 'package:word_notifier/future/presentation/bloc/dictionary/search_dictionary_cubit.dart';
 import 'package:word_notifier/future/presentation/bloc/locale/app_locale_cubit.dart';
 
@@ -56,6 +51,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
             },
             child: const Text('Query'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              FirebaseAuth.instance.signOut();
+            },
+            child: const Text('Sign Out'),
           ),
         ],
       ),

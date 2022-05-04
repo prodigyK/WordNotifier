@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:word_notifier/future/domain/usecases/locale/update_locale.dart';
 import 'package:word_notifier/future/domain/usecases/users/fetch_user_case.dart';
 import 'package:word_notifier/future/domain/usecases/users/insert_user_case.dart';
+import 'package:word_notifier/future/presentation/screens/welcome.dart';
 import 'package:word_notifier/service_locator.dart' as di;
 import 'package:dotenv/dotenv.dart' as dotenv;
 
@@ -18,10 +20,10 @@ import 'future/presentation/bloc/dictionary/dictionary_cubit.dart';
 import 'future/presentation/bloc/dictionary/search_dictionary_cubit.dart';
 import 'future/presentation/bloc/locale/app_locale_cubit.dart';
 import 'future/presentation/bloc/users/user_cubit.dart';
-import 'future/presentation/screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   dotenv.load();
   await di.init();
   runApp(
@@ -65,7 +67,7 @@ class WordNotifierApp extends StatelessWidget {
       builder: (context, state) {
         return MaterialApp(
           debugShowCheckedModeBanner: kDebugMode,
-          initialRoute: HomeScreen.routeName,
+          initialRoute: Welcome.routeName,
           theme: AppTheme.themeData,
           routes: AppRoutes.routes,
           navigatorKey: NavigationService.navigatorKey,
