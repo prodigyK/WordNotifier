@@ -26,7 +26,7 @@ class DictionaryLocalDataSourceImpl implements DictionaryLocalDataSource {
     List<Map<String, dynamic>> result = await database.rawQuery(
       'SELECT id, word, translation, transcription, direction '
       'FROM $table '
-      'WHERE word LIKE \'%$query%\'',
+      'WHERE word LIKE \'$query%\'',
     );
     return result.map((item) => DictionaryModel.fromJson(item)).toList();
   }

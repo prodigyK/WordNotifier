@@ -34,17 +34,11 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Wordify'),
-        elevation: 1,
-        backgroundColor: Colors.orange,
-        toolbarHeight: 80,
-      ),
+
       body: screens[selectedIndex]['screen'],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
-        backgroundColor: Colors.white38,
+        // backgroundColor: Colors.white38,
         items: screens
             .map((item) => BottomNavigationBarItem(
                   icon: Icon(item['icon']),
