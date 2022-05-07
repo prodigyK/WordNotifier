@@ -14,7 +14,6 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   late TextEditingController _textController;
 
-  // List<DictionaryEntity> dict = [];
   List<DictionaryEntity> words = [];
 
   @override
@@ -24,205 +23,158 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-
-    // dict = await dictCubit.search('');
-  }
-
-  @override
   Widget build(BuildContext context) {
     final dict = BlocProvider.of<SearchDictionaryCubit>(context);
 
     print('build ${words.length} $words');
 
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-            pinned: true,
-            // snap: true,
-            // floating: false,
-            backgroundColor: Colors.orange,
-            title: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-              width: double.infinity,
-              child: const Text(
-                'Search words',
-                style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            bottom: PreferredSize(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: Colors.orange)),
-                  color: Colors.transparent,
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor.withOpacity(0.05),
+        borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20)),
+      ),
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+              pinned: true,
+              // snap: true,
+              // floating: false,
+              backgroundColor: Theme.of(context).primaryColor, //Colors.orange,
+              title: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
+                width: double.infinity,
+                child: Text(
+                  'Search words',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1
+                      ?.copyWith(color: Colors.white, letterSpacing: 1.2, fontSize: 16),
+                  textAlign: TextAlign.center,
                 ),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: CupertinoSearchTextField(
-                    controller: _textController,
-                    onChanged: (String value) async {
-                      print('value = $value');
-                      if (value.isEmpty || value.length < 2) {
-                        setState(() {
-                          words = [];
-                        });
-                        return;
-                      }
-                      words = await dict.search(value);
-                      print('onChange $words');
-                      setState(() {});
-                    },
-                    onSuffixTap: () {
-                      setState(() {
-                        _textController.text = '';
-                        words = [];
-                      });
-                    },
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-                    prefixInsets: const EdgeInsets.only(left: 20),
-                    suffixInsets: const EdgeInsets.only(right: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.circular(16.0),
+              ),
+              bottom: PreferredSize(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
+                      decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Theme.of(context).primaryColor)),
+                        // color: Colors.transparent,
+                      ),
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          child: CupertinoSearchTextField(
+                            controller: _textController,
+                            onChanged: (String value) async {
+                              print('value = $value');
+                              if (value.isEmpty || value.length < 2) {
+                                setState(() {
+                                  words = [];
+                                });
+                                return;
+                              }
+                              words = await dict.search(value);
+                              print('onChange $words');
+                              setState(() {});
+                            },
+                            onSuffixTap: () {
+                              setState(() {
+                                _textController.text = '';
+                                words = [];
+                              });
+                            },
+                            placeholder: '',
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+                            prefixInsets: const EdgeInsets.only(left: 20),
+                            suffixInsets: const EdgeInsets.only(right: 20),
+                            backgroundColor: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(16.0),
+                            itemColor: CupertinoColors.systemBackground,
+                            autofocus: true,
+                            style: Theme.of(context).textTheme.headline3?.copyWith(
+                                  color: CupertinoColors.systemBackground,
+                                  letterSpacing: 1.2,
+                                  decoration: TextDecoration.none,
+                                  decorationColor: Colors.transparent,
+                                ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ),
-              preferredSize: const Size.fromHeight(50),
-            )),
-        // SliverAppBar(preferredSize: const Size.fromHeight(5),),
-        SliverFixedExtentList(
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return _buildRowItem(words[index]);
-            },
-            childCount: words.length,
-          ),
-          itemExtent: 58,
-        ),
-      ],
-      // appBar: AppBar(
-      //   centerTitle: true,
-      //   title: const Text('Wordify'),
-      //   elevation: 1,
-      //   backgroundColor: Colors.orange,
-      //   toolbarHeight: 110,
-      //
-      // ),
-
-/*      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, kToolbarHeight*2),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-          decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: Colors.orange)),
-            color: Colors.orange,
-          ),
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: CupertinoSearchTextField(
-              controller: _textController,
-              onChanged: (String value) async {
-                print('value = $value');
-                if (value.isEmpty || value.length < 2) {
-                  setState(() {
-                    words = [];
-                  });
-                  return;
-                }
-                words = await dict.search(value);
-                print('onChange $words');
-                setState(() {});
+                preferredSize: const Size.fromHeight(40),
+              )),
+          SliverFixedExtentList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return _buildCustomRowItem(words[index]);
               },
-              onSuffixTap: () {
-                setState(() {
-                  _textController.text = '';
-                  words = [];
-                });
-              },
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-              prefixInsets: const EdgeInsets.only(left: 20),
-              decoration: BoxDecoration(
-                color: Colors.amber,
-                borderRadius: BorderRadius.circular(16.0),
-              ),
+              childCount: words.length,
             ),
+            itemExtent: 60,
           ),
-        ),
-      ),*/
-
-/*      body: Container(
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: words.length,
-                itemBuilder: (context, index) => _buildRowItem(words[index]),
-              ),
-            ),
-            // Expanded(
-            //   child: SingleChildScrollView(
-            //     child: Column(
-            //       children: words.map((item) => _buildRowItem(item)).toList(),
-            //     ),
-            //   ),
-            // )
-          ],
-        ),
-      ),*/
+        ],
+      ),
     );
   }
 
-  Widget _buildRowItem(DictionaryEntity item) {
+  Widget _buildCustomRowItem(DictionaryEntity item) {
     return Container(
-      // height: 30,
       width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 2).copyWith(top: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          border: Border.all(color: Colors.orange, width: 1.5),
-          color: Colors.orange.shade50,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.orange.shade400,
-              // spreadRadius: 1.0,
-              blurRadius: 1.0,
-              offset: Offset(1.0, 1.0),
-            )
-          ]),
+        border: Border(bottom: BorderSide(color: Theme.of(context).primaryColor, width: 0.2)),
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Icon(Icons.search, color: Theme.of(context).primaryColor),
+          ),
+          const SizedBox(width: 12),
           Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Text(
-                    item.word,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(width: 12),
+                  Text(item.word,
+                      style: Theme.of(context).textTheme.headline3?.copyWith(color: Colors.black87.withOpacity(0.7))),
+                  const SizedBox(width: 8),
                   Text(
                     item.transcription,
-                    style: const TextStyle(fontSize: 13),
+                    style: Theme.of(context).textTheme.bodyText1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 4),
               Text(item.translation),
             ],
           ),
-          ElevatedButton(
+          const Spacer(),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: OutlinedButton(
               onPressed: () {},
-              child: Text('Add'),
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.orange))),
+              child: Text(
+                'Add',
+                style: Theme.of(context).textTheme.headline3?.copyWith(color: Theme.of(context).primaryColor),
+              ),
+              style: ButtonStyle(
+                side: MaterialStateProperty.all(BorderSide(color: Theme.of(context).primaryColor)),
+              ),
+            ),
+          ),
         ],
       ),
     );

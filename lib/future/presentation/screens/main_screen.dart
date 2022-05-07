@@ -34,22 +34,43 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      extendBody: true,
       body: screens[selectedIndex]['screen'],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
-        // backgroundColor: Colors.white38,
-        items: screens
-            .map((item) => BottomNavigationBarItem(
-                  icon: Icon(item['icon']),
-                  label: item['label'],
-                ))
-            .toList(),
-        onTap: (value) {
-          setState(() {
-            selectedIndex = value;
-          });
-        },
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(topRight: Radius.circular(20), topLeft: Radius.circular(20)),
+            boxShadow: [
+              BoxShadow(
+                  blurRadius: 3,
+                  // spreadRadius: 1.0,
+                  color: Theme.of(context).primaryColor.withOpacity(0.5))
+            ]),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20.0),
+            topRight: Radius.circular(20.0),
+          ),
+          child: BottomNavigationBar(
+            currentIndex: selectedIndex,
+            // backgroundColor: CupertinoColors.systemBackground,
+            backgroundColor: Theme.of(context).primaryColor,
+            selectedItemColor: Colors.green,
+            unselectedItemColor: Colors.white,
+            elevation: 8,
+            // iconSize: 28,
+            items: screens
+                .map((item) => BottomNavigationBarItem(
+                      icon: Icon(item['icon']),
+                      label: item['label'],
+                    ))
+                .toList(),
+            onTap: (value) {
+              setState(() {
+                selectedIndex = value;
+              });
+            },
+          ),
+        ),
       ),
     );
   }
